@@ -134,7 +134,7 @@ jobs:
       - cehckout
       # Restore from cache
       - restore_cache:
-          keys: [frontend-scan]
+          keys: [backend-scan]
           name: Back-end test
           command: |
              cd backend
