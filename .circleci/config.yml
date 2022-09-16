@@ -177,7 +177,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: cticti/aws-cli:python3
+      - image: cticti/aws-cli:python3.6-alpine
     steps:
       # Checkout code from git
       - checkout
