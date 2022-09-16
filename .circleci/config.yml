@@ -166,7 +166,6 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances --query Reservations[*].Instances[*].PublicIpAddress --output text >> inventory.txt --region us-east-1 
-            # Your code here
         # exit 1
       - persist_to_workspace:
           root: ~/
@@ -174,7 +173,6 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
-
 #   configure-infrastructure:
 #     docker:
 #       # Docker image here that supports Ansible
