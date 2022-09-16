@@ -135,11 +135,12 @@ jobs:
       # Restore from cache
       - restore_cache:
           keys: [frontend-scan]
-      # Your job code here
-      cd backend
-      npm install
-      # npm install oauth-sign@^0.9.0
-      npm audit --audit-level=critical
+          name: Back-end test
+          command: |
+             cd backend
+             npm install
+             # npm install oauth-sign@^0.9.0
+             npm audit --audit-level=critical
 
 #   deploy-infrastructure:
 #     docker:
