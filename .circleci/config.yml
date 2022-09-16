@@ -173,24 +173,48 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cticti/aws-cli:python3
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+              # You can get this ID in the section where you registered the SSH Key
+              fingerprints: ["5b:98:6b:1b:7c:cc:3e:7c:82:ea:1a:1b:23:9a:b7:22"]       
+      # attach workspace
+          steps:
+      - checkout
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/ #/workspace
+      
+      - run:
+          name: Install dependencies
+          command: |
+            # Install Ansible
+            apk add --update ansible
+            yum install -y tar gzip
+        # exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            # Configure the EC instance in AWS account 
+            apk update
+            apk upgrade
+            apk add --update curl
+            # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            # unzip awscliv2.zip
+            # aws --version
+            aws ec2 describe-instances --query Reservations[*].Instances[*].PublicIpAddress --output text >> inventory.txt --region us-east-1 
+            ansible-playbook -i inventory.txt main.yml 
+        # exit 1
+      # Here's where you will add some code to rollback on failure      
+      - destroy-environment
 
 #   run-migrations:
 #     docker:
@@ -330,8 +354,8 @@ workflows:
           # filters:
           #   branches:
           #     only: [test-feature-branch]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
