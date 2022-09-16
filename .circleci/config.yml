@@ -186,7 +186,7 @@ jobs:
               # You can get this ID in the section where you registered the SSH Key
               fingerprints: ["5b:98:6b:1b:7c:cc:3e:7c:82:ea:1a:1b:23:9a:b7:22"]       
       # attach workspace
-          steps:
+      steps:
       - checkout
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
