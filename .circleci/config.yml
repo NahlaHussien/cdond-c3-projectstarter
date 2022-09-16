@@ -127,14 +127,13 @@ jobs:
 
   scan-backend:
     docker:
-    docker:
       # Docker image here
       - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - cehckout
       # Restore from cache
-       - restore_cache:
+      - restore_cache:
           keys: [frontend-scan]
       # Your job code here
       cd backend
